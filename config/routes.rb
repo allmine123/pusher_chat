@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       post '/join' => 'chat_rooms#join'
       #post 'chat_rooms/:id/join' => 'chat_rooms#join'
       post '/chat' => 'chat_rooms#chat'
+      delete '/exit' => 'chat_rooms#exit'
     end
   end
 

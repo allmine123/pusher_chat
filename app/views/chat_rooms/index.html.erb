@@ -15,10 +15,10 @@
 
   <tbody class="chat_room_list">
     <% @chat_rooms.each do |chat_room| %>
-      <tr>
+      <tr id = "chat_room_<%= chat_room.id %>">
         <td><%= chat_room.title %></td>
         <td><%= chat_room.master_id %></td>
-        <td><%= chat_room.admissions_count %>/<%= chat_room.max_count %></td>
+        <td class = ""><%= chat_room.admissions_count %>/<%= chat_room.max_count %></td>
         <td><%= link_to 'Show', chat_room %></td>
         <td><%= link_to 'Edit', edit_chat_room_path(chat_room) %></td>
         <td><%= link_to 'Destroy', chat_room, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -39,15 +39,39 @@
     encrypted: true
     });
 
+    function room_add(data){
+        $('.chat_room_list').append(`
+          <tr>
+            <td>${data.title}</td>
+            <td>${data.master_id}</td>
+            <td>${data.admissions_count}/${data.max_count}</td>
+            <td><a href="/chat_rooms/${data.id}">Show</a></td>
+            <td><a href="/chat_rooms/${data.id}/edit">Edit</a></td>
+            <td><a data-confirm="Are you sure?" rel="nofollow" data-method="delete" href="/chat_rooms/${data.id}">Destroy</a></td>
+          </tr>
+          `);
+    }
 
     var channel = pusher.subscribe('chat_room');
     channel.bind('create', function(data) {
-      console.log('방 만들어졌니??');
+      //방 리스트에 추가
+      room_add(data);
     });
 
-    channel.bind('join', function(data) {
-      console.log('유저 있니??');
-    });
+    // channel.bind('join', function(data) {
+    //   // 인원 추가
+    //
+    // });
+    //
+    // channel.bind('exit', function(data) {
+    //   //인원 아웃
+    //
+    // });
+    //
+    // channel.bind('destroy', function(data) {
+    //   //방삭
+    //
+    // });
   });
 
 </script>
